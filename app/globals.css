@@ -124,7 +124,6 @@
   }
 }
 
-
 /* Print Styles */
 @media print {
   @page {
@@ -147,26 +146,6 @@
     display: none !important;
   }
 
-  /* Hide mobile layout during print */
-  #schedule-grid-mobile,
-  [id*="mobile"] {
-    display: none !important;
-  }
-
-  /* Show desktop table during print (even on mobile) - override hidden class */
-  #schedule-grid {
-    display: block !important;
-    flex-grow: 1 !important;
-    border: 1px solid black !important;
-    overflow: hidden !important;
-  }
-
-  /* Force show desktop table even if it has 'hidden' class */
-  #schedule-grid.hidden,
-  #schedule-grid[class*="hidden"] {
-    display: block !important;
-  }
-
   /* Ensure the grid takes full width and height */
   #printable-dashboard {
     width: 100vw !important;
@@ -180,16 +159,17 @@
     flex-direction: column !important;
   }
 
+  #schedule-grid {
+    flex-grow: 1 !important;
+    border: 1px solid black !important;
+    overflow: hidden !important; /* No scrolling in print */
+  }
+
   table {
     width: 100% !important;
     height: 100% !important;
     table-layout: fixed !important;
     border-collapse: collapse !important;
-  }
-
-  /* Hide all input fields and show their values */
-  input {
-    display: none !important;
   }
 
   /* Typography tweaks for print */

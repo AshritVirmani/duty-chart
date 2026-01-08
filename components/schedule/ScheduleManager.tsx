@@ -459,174 +459,8 @@ export function ScheduleManager() {
   }, []);
 
   const handleExport = useCallback(() => {
-    // For mobile/iOS: Replace inputs with their values before printing
-    const printableDashboard = document.getElementById('printable-dashboard');
-    if (!printableDashboard) {
-      window.print();
-      return;
-    }
-
-    // Find all inputs and replace with spans containing their values
-    const inputs = printableDashboard.querySelectorAll('input');
-    const replacements: Array<{ input: HTMLInputElement; span: HTMLSpanElement; parent: Node | null }> = [];
-
-    inputs.forEach(input => {
-      const span = document.createElement('span');
-      span.textContent = input.value || '';
-      const computedStyle = getComputedStyle(input);
-      span.style.fontWeight = computedStyle.fontWeight;
-      span.style.fontSize = computedStyle.fontSize;
-      span.style.fontStyle = computedStyle.fontStyle;
-      span.style.textAlign = computedStyle.textAlign;
-      span.style.display = 'inline';
-      span.className = input.className.replace(/print:hidden/g, '').replace(/hidden/g, '');
-      
-      const parent = input.parentNode;
-      if (parent) {
-        parent.replaceChild(span, input);
-        replacements.push({ input, span, parent });
-      }
-    });
-
-    // Hide mobile layout, show desktop table
-    const mobileGrid = document.getElementById('schedule-grid-mobile');
-    const desktopGrid = document.getElementById('schedule-grid');
-    
-    if (mobileGrid) {
-      mobileGrid.style.display = 'none';
-    }
-    if (desktopGrid) {
-      desktopGrid.style.display = 'block';
-    }
-
-    // Small delay to ensure DOM updates, then print
-    setTimeout(() => {
-      window.print();
-      
-      // Restore inputs after print dialog closes
-      setTimeout(() => {
-        replacements.forEach(({ input, span, parent }) => {
-          if (parent && span.parentNode === parent) {
-            parent.replaceChild(input, span);
-          }
-        });
-        
-        // Restore mobile/desktop visibility
-        if (mobileGrid) {
-          mobileGrid.style.display = '';
-        }
-        if (desktopGrid) {
-          desktopGrid.style.display = '';
-        }
-      }, 500);
-    }, 100);
+    window.print();
   }, []);
-
-  const handleExportWord = useCallback(() => {
-    // Get the desktop table (not mobile card layout)
-    const desktopGrid = document.getElementById('schedule-grid');
-    const printableDashboard = document.getElementById('printable-dashboard');
-    if (!printableDashboard || !desktopGrid) return;
-    
-    const header = printableDashboard.querySelector('header');
-    const footer = document.getElementById('schedule-footer');
-
-    // Clone elements
-    const headerClone = header ? (header.cloneNode(true) as HTMLElement) : null;
-    const gridClone = desktopGrid.cloneNode(true) as HTMLElement;
-    const footerClone = footer ? (footer.cloneNode(true) as HTMLElement) : null;
-
-    // Helper to replace inputs with their values
-    const replaceInputs = (el: HTMLElement) => {
-      const inputs = el.querySelectorAll('input');
-      inputs.forEach(input => {
-        const span = document.createElement('span');
-        span.textContent = input.value || '';
-        const computedStyle = getComputedStyle(input);
-        span.style.fontWeight = computedStyle.fontWeight;
-        span.style.fontSize = computedStyle.fontSize;
-        span.style.fontStyle = computedStyle.fontStyle;
-        span.style.textAlign = computedStyle.textAlign;
-        span.className = input.className.replace(/print:hidden/g, '').replace(/hidden/g, '');
-        input.parentNode?.replaceChild(span, input);
-      });
-    };
-
-    // Replace inputs in all cloned elements
-    if (headerClone) replaceInputs(headerClone);
-    replaceInputs(gridClone);
-    if (footerClone) replaceInputs(footerClone);
-
-    // Remove mobile-specific elements and show print elements
-    const processElement = (el: HTMLElement) => {
-      // Remove mobile layout
-      const mobileElements = el.querySelectorAll('[id*="mobile"], [class*="md:hidden"]');
-      mobileElements.forEach(elem => elem.remove());
-      
-      // Show print elements
-      const printHidden = el.querySelectorAll('.print\\:hidden, [class*="print:hidden"]');
-      printHidden.forEach(elem => elem.remove());
-      
-      // Make print:block/flex visible
-      const printBlock = el.querySelectorAll('.print\\:block, [class*="print:block"]');
-      printBlock.forEach(elem => {
-        elem.classList.remove('hidden', 'print:hidden');
-        elem.classList.add('block');
-      });
-      
-      const printFlex = el.querySelectorAll('.print\\:flex, [class*="print:flex"]');
-      printFlex.forEach(elem => {
-        elem.classList.remove('hidden', 'print:hidden');
-        elem.classList.add('flex');
-      });
-    };
-
-    if (headerClone) processElement(headerClone);
-    processElement(gridClone);
-    if (footerClone) processElement(footerClone);
-    
-    const htmlContent = `
-      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-      <head>
-        <meta charset='utf-8'>
-        <title>Volunteer Schedule - ${format(currentWeekStart, "yyyy-MM-dd")}</title>
-        <meta name="author" content="Ashrit Virmani">
-        <style>
-          body { font-family: 'Arial', sans-serif; margin: 20px; }
-          table { border-collapse: collapse; width: 100%; table-layout: fixed; }
-          td, th { border: 1px solid black !important; padding: 4px; text-align: center; vertical-align: middle; word-wrap: break-word; }
-          .print\\:hidden, [class*="print:hidden"] { display: none !important; }
-          .print\\:block, [class*="print:block"] { display: block !important; }
-          .print\\:flex, [class*="print:flex"] { display: flex !important; }
-          .hidden { display: none; }
-          .hidden.print\\:block, .hidden[class*="print:block"] { display: block !important; }
-          .hidden.print\\:flex, .hidden[class*="print:flex"] { display: flex !important; }
-          h1, h2 { text-align: center; }
-          input { display: none !important; }
-          span { display: inline; }
-        </style>
-      </head>
-      <body>
-        ${headerClone ? headerClone.outerHTML : ''}
-        ${gridClone.outerHTML}
-        ${footerClone ? footerClone.outerHTML : ''}
-      </body>
-      </html>
-    `;
-
-    const blob = new Blob(['\ufeff', htmlContent], {
-      type: 'application/msword'
-    });
-    
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Schedule-${format(currentWeekStart, "yyyy-MM-dd")}.doc`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  }, [currentWeekStart]);
 
   const t = translations[currentLang];
 
@@ -647,14 +481,13 @@ export function ScheduleManager() {
   const allVolunteers = [...displayStage, ...displaySanchalan]; 
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 p-2 md:p-4">
+    <div className="flex flex-col h-screen bg-gray-50 p-2 md:p-4 overflow-hidden">
       <ControlPanel
         onRandomizeStage={handleRandomizeStage}
         onRandomizeSanchalan={handleRandomizeSanchalan}
         onReset={handleReset}
         onSave={handleSave}
         onExport={handleExport}
-        onExportWord={handleExportWord}
         isDirty={isDirty}
         
         stageVolunteers={displayStage}
@@ -673,7 +506,7 @@ export function ScheduleManager() {
         onLangChange={setCurrentLang}
       />
 
-      <div id="printable-dashboard" className="flex-1 flex flex-col gap-2 md:gap-4 bg-white p-2 md:p-4 rounded-lg shadow-sm border border-slate-200">
+      <div id="printable-dashboard" className="flex-1 flex flex-col gap-2 md:gap-4 bg-white p-2 md:p-4 rounded-lg shadow-sm border border-slate-200 overflow-hidden">
         <header className="text-center mb-1 md:mb-4 flex-shrink-0">
             <h2 className="text-sm md:text-xl font-semibold text-gray-800 mb-1 md:mb-2 italic print:text-sm">
                <input 

@@ -13,7 +13,7 @@ export function Footer({ currentLang, title, reqs, onTitleUpdate, onReqUpdate }:
   // Use translations for keys but display logic is handled by parent passing in title/reqs
   
   return (
-    <div id="schedule-footer" className="mt-4 md:mt-6 bg-white p-3 md:p-6 rounded-lg shadow-sm border border-slate-200 text-xs md:text-base print:border-none print:shadow-none print:text-sm">
+    <div className="mt-4 md:mt-6 bg-white p-3 md:p-6 rounded-lg shadow-sm border border-slate-200 text-xs md:text-base print:border-none print:shadow-none print:text-sm">
       <div className="flex flex-col md:flex-row gap-2 md:gap-4">
         <div className="font-bold text-gray-900 whitespace-nowrap min-w-[100px] md:min-w-[120px]">
           <input 

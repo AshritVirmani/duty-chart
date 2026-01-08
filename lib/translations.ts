@@ -29,7 +29,6 @@ export const translations = {
       randomize_sanchalan: "Randomize Sanchalan",
       reset: "Reset",
       export: "Export PDF",
-      export_doc: "Export Word",
       save: "Save",
     },
     grid: {
@@ -94,7 +93,6 @@ export const translations = {
       randomize_sanchalan: "संचालन रैंडमाइज़",
       reset: "रीसेट करें",
       export: "पीडीएफ निर्यात",
-      export_doc: "वर्ड निर्यात",
       save: "सहेजें",
     },
     grid: {
@@ -159,7 +157,6 @@ export const translations = {
       randomize_sanchalan: "ਸੰਚਾਲਨ ਰੈਂਡਮਾਈਜ਼",
       reset: "ਰੀਸੈਟ",
       export: "PDF ਐਕਸਪੋਰਟ",
-      export_doc: "Word ਐਕਸਪੋਰਟ",
       save: "ਸੇਵ",
     },
     grid: {
@@ -224,7 +221,6 @@ export const translations = {
       randomize_sanchalan: "संचालन रैंडमाइज",
       reset: "रीसेट",
       export: "PDF निर्यात",
-      export_doc: "Word निर्यात",
       save: "जतन करा",
     },
     grid: {
@@ -289,7 +285,6 @@ export const translations = {
       randomize_sanchalan: "देखरेख रैंडम",
       reset: "पैलु जसि",
       export: "PDF बनावा",
-      export_doc: "Word बनावा",
       save: "सेभ करा",
     },
     grid: {
