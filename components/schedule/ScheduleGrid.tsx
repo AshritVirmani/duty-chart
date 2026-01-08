@@ -100,7 +100,7 @@ export function ScheduleGrid({
 
       {/* Desktop Table Layout */}
       <div className="hidden md:block flex-1 overflow-auto border border-black rounded-lg shadow-lg bg-white relative print:border-none print:shadow-none print:overflow-visible print:block" id="schedule-grid">
-        <table className="w-full border-collapse min-w-full print:min-w-0 print:w-full print:table-fixed print:h-full" style={{ tableLayout: 'auto' }}>
+        <table className="w-full border-collapse min-w-full print:min-w-0 print:w-full print:table-fixed print:h-full">
         <thead className="bg-slate-100 sticky top-0 z-20 shadow-sm print:static print:bg-white print:shadow-none">
           <tr>
             <th
