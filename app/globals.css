@@ -156,9 +156,12 @@
   /* Show desktop table during print (even on mobile) - override hidden class */
   #schedule-grid {
     display: block !important;
+    flex: 1 1 auto !important;
     flex-grow: 1 !important;
     border: 1px solid black !important;
     overflow: hidden !important;
+    height: auto !important;
+    max-height: 100% !important;
   }
 
   /* Force show desktop table even if it has 'hidden' class */
@@ -178,13 +181,15 @@
     padding: 0.5cm !important;
     display: flex !important;
     flex-direction: column !important;
+    overflow: hidden !important;
   }
 
-  table {
+  #schedule-grid table {
     width: 100% !important;
     height: 100% !important;
     table-layout: fixed !important;
     border-collapse: collapse !important;
+    display: table !important;
   }
 
   /* Hide all input fields and show their values */
