@@ -459,7 +459,67 @@ export function ScheduleManager() {
   }, []);
 
   const handleExport = useCallback(() => {
-    window.print();
+    // For mobile/iOS: Replace inputs with their values before printing
+    const printableDashboard = document.getElementById('printable-dashboard');
+    if (!printableDashboard) {
+      window.print();
+      return;
+    }
+
+    // Find all inputs and replace with spans containing their values
+    const inputs = printableDashboard.querySelectorAll('input');
+    const replacements: Array<{ input: HTMLInputElement; span: HTMLSpanElement; parent: Node | null }> = [];
+
+    inputs.forEach(input => {
+      const span = document.createElement('span');
+      span.textContent = input.value || '';
+      const computedStyle = getComputedStyle(input);
+      span.style.fontWeight = computedStyle.fontWeight;
+      span.style.fontSize = computedStyle.fontSize;
+      span.style.fontStyle = computedStyle.fontStyle;
+      span.style.textAlign = computedStyle.textAlign;
+      span.style.display = 'inline';
+      span.className = input.className.replace(/print:hidden/g, '').replace(/hidden/g, '');
+      
+      const parent = input.parentNode;
+      if (parent) {
+        parent.replaceChild(span, input);
+        replacements.push({ input, span, parent });
+      }
+    });
+
+    // Hide mobile layout, show desktop table
+    const mobileGrid = document.getElementById('schedule-grid-mobile');
+    const desktopGrid = document.getElementById('schedule-grid');
+    
+    if (mobileGrid) {
+      mobileGrid.style.display = 'none';
+    }
+    if (desktopGrid) {
+      desktopGrid.style.display = 'block';
+    }
+
+    // Small delay to ensure DOM updates, then print
+    setTimeout(() => {
+      window.print();
+      
+      // Restore inputs after print dialog closes
+      setTimeout(() => {
+        replacements.forEach(({ input, span, parent }) => {
+          if (parent && span.parentNode === parent) {
+            parent.replaceChild(input, span);
+          }
+        });
+        
+        // Restore mobile/desktop visibility
+        if (mobileGrid) {
+          mobileGrid.style.display = '';
+        }
+        if (desktopGrid) {
+          desktopGrid.style.display = '';
+        }
+      }, 500);
+    }, 100);
   }, []);
 
   const handleExportWord = useCallback(() => {
