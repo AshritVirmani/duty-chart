@@ -463,57 +463,93 @@ export function ScheduleManager() {
   }, []);
 
   const handleExportWord = useCallback(() => {
-    const element = document.getElementById('printable-dashboard');
-    if (!element) return;
+    // Get the desktop table (not mobile card layout)
+    const desktopGrid = document.getElementById('schedule-grid');
+    const printableDashboard = document.getElementById('printable-dashboard');
+    if (!printableDashboard || !desktopGrid) return;
+    
+    const header = printableDashboard.querySelector('header');
+    const footer = document.getElementById('schedule-footer');
 
-    // Clone the element to manipulate it for export
-    const clone = element.cloneNode(true) as HTMLElement;
+    // Clone elements
+    const headerClone = header ? (header.cloneNode(true) as HTMLElement) : null;
+    const gridClone = desktopGrid.cloneNode(true) as HTMLElement;
+    const footerClone = footer ? (footer.cloneNode(true) as HTMLElement) : null;
 
     // Helper to replace inputs with their values
     const replaceInputs = (el: HTMLElement) => {
       const inputs = el.querySelectorAll('input');
       inputs.forEach(input => {
         const span = document.createElement('span');
-        span.textContent = input.value;
-        span.style.fontWeight = getComputedStyle(input).fontWeight;
+        span.textContent = input.value || '';
+        const computedStyle = getComputedStyle(input);
+        span.style.fontWeight = computedStyle.fontWeight;
+        span.style.fontSize = computedStyle.fontSize;
+        span.style.fontStyle = computedStyle.fontStyle;
+        span.style.textAlign = computedStyle.textAlign;
+        span.className = input.className.replace(/print:hidden/g, '').replace(/hidden/g, '');
         input.parentNode?.replaceChild(span, input);
       });
     };
 
-    replaceInputs(clone);
-    
-    // Also handle hidden print elements - make them visible if they are hidden
-    // The grid uses 'hidden print:block' for some text elements. 
-    // We need to ensure 'print:block' elements are visible and 'print:hidden' are hidden.
-    // Since we can't easily parse Tailwind classes in JS without a library, 
-    // we'll rely on the fact that we replaced inputs with spans above.
-    // However, for the grid headers, there are separate view/edit modes.
-    // The best way is to apply a style block that mimics the print media query.
+    // Replace inputs in all cloned elements
+    if (headerClone) replaceInputs(headerClone);
+    replaceInputs(gridClone);
+    if (footerClone) replaceInputs(footerClone);
+
+    // Remove mobile-specific elements and show print elements
+    const processElement = (el: HTMLElement) => {
+      // Remove mobile layout
+      const mobileElements = el.querySelectorAll('[id*="mobile"], [class*="md:hidden"]');
+      mobileElements.forEach(elem => elem.remove());
+      
+      // Show print elements
+      const printHidden = el.querySelectorAll('.print\\:hidden, [class*="print:hidden"]');
+      printHidden.forEach(elem => elem.remove());
+      
+      // Make print:block/flex visible
+      const printBlock = el.querySelectorAll('.print\\:block, [class*="print:block"]');
+      printBlock.forEach(elem => {
+        elem.classList.remove('hidden', 'print:hidden');
+        elem.classList.add('block');
+      });
+      
+      const printFlex = el.querySelectorAll('.print\\:flex, [class*="print:flex"]');
+      printFlex.forEach(elem => {
+        elem.classList.remove('hidden', 'print:hidden');
+        elem.classList.add('flex');
+      });
+    };
+
+    if (headerClone) processElement(headerClone);
+    processElement(gridClone);
+    if (footerClone) processElement(footerClone);
     
     const htmlContent = `
       <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
       <head>
         <meta charset='utf-8'>
-        <title>Volunteer Schedule</title>
+        <title>Volunteer Schedule - ${format(currentWeekStart, "yyyy-MM-dd")}</title>
+        <meta name="author" content="Ashrit Virmani">
         <style>
-          body { font-family: 'Arial', sans-serif; }
+          body { font-family: 'Arial', sans-serif; margin: 20px; }
           table { border-collapse: collapse; width: 100%; table-layout: fixed; }
-          td, th { border: 1px solid black; padding: 4px; text-align: center; vertical-align: middle; word-wrap: break-word; }
-          .print\\:hidden { display: none !important; }
-          .print\\:block { display: block !important; }
-          .print\\:flex { display: flex !important; }
+          td, th { border: 1px solid black !important; padding: 4px; text-align: center; vertical-align: middle; word-wrap: break-word; }
+          .print\\:hidden, [class*="print:hidden"] { display: none !important; }
+          .print\\:block, [class*="print:block"] { display: block !important; }
+          .print\\:flex, [class*="print:flex"] { display: flex !important; }
           .hidden { display: none; }
-          /* Override hidden for print:block/flex */
-          .hidden.print\\:block { display: block !important; }
-          .hidden.print\\:flex { display: flex !important; }
-          
-          /* Specific overrides for this dashboard */
+          .hidden.print\\:block, .hidden[class*="print:block"] { display: block !important; }
+          .hidden.print\\:flex, .hidden[class*="print:flex"] { display: flex !important; }
           h1, h2 { text-align: center; }
-          input { border: none; background: transparent; }
+          input { display: none !important; }
+          span { display: inline; }
         </style>
       </head>
       <body>
-        ${clone.innerHTML}
+        ${headerClone ? headerClone.outerHTML : ''}
+        ${gridClone.outerHTML}
+        ${footerClone ? footerClone.outerHTML : ''}
       </body>
       </html>
     `;
