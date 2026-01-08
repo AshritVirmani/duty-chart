@@ -156,12 +156,12 @@
   /* Show desktop table during print (even on mobile) - override hidden class */
   #schedule-grid {
     display: block !important;
-    flex: 1 1 auto !important;
+    flex: 1 1 0 !important;
     flex-grow: 1 !important;
+    flex-shrink: 1 !important;
     border: 1px solid black !important;
     overflow: hidden !important;
-    height: auto !important;
-    max-height: 100% !important;
+    min-height: 0 !important;
   }
 
   /* Force show desktop table even if it has 'hidden' class */
@@ -182,14 +182,35 @@
     display: flex !important;
     flex-direction: column !important;
     overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  #printable-dashboard > header {
+    flex-shrink: 0 !important;
+  }
+  
+  #printable-dashboard > #schedule-grid {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+  }
+  
+  #printable-dashboard > #dashboard-footer {
+    flex-shrink: 0 !important;
   }
 
   #schedule-grid table {
     width: 100% !important;
-    height: 100% !important;
     table-layout: fixed !important;
     border-collapse: collapse !important;
     display: table !important;
+  }
+  
+  #schedule-grid thead {
+    display: table-header-group !important;
+  }
+  
+  #schedule-grid tbody {
+    display: table-row-group !important;
   }
 
   /* Hide all input fields and show their values */
@@ -203,13 +224,32 @@
     padding: 2px 4px !important;
     white-space: normal !important;
     word-break: break-word !important;
+    vertical-align: middle !important;
   }
   
-  h1 {
+  /* Remove sticky positioning in print */
+  #schedule-grid th[class*="sticky"],
+  #schedule-grid td[class*="sticky"] {
+    position: static !important;
+  }
+  
+  /* Header and footer sizing for print */
+  #printable-dashboard > header {
+    padding: 0.2cm 0 !important;
+  }
+  
+  #printable-dashboard > header h1 {
     font-size: 16px !important;
+    margin: 0.1cm 0 !important;
   }
   
-  h2 {
+  #printable-dashboard > header h2 {
     font-size: 12px !important;
+    margin: 0.1cm 0 !important;
+  }
+  
+  #dashboard-footer {
+    padding: 0.3cm 0 !important;
+    font-size: 11px !important;
   }
 }
