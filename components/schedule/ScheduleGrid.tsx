@@ -28,7 +28,7 @@ export function ScheduleGrid({
   const t = translations[currentLang];
 
   return (
-    <div className="flex-1 overflow-auto border border-black rounded-lg shadow-lg bg-white relative print:border-none print:shadow-none print:overflow-visible" id="schedule-grid">
+    <div className="h-full overflow-auto border border-black rounded-lg shadow-lg bg-white relative print:border-none print:shadow-none print:overflow-visible" id="schedule-grid">
       <table className="w-full border-collapse min-w-max md:min-w-0 print:min-w-0 print:w-full print:table-fixed print:h-full">
         <thead className="bg-slate-100 sticky top-0 z-20 shadow-sm print:static print:bg-white print:shadow-none">
           <tr>

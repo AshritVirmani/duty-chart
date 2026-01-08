@@ -506,7 +506,7 @@ export function ScheduleManager() {
         onLangChange={setCurrentLang}
       />
 
-      <div id="printable-dashboard" className="flex-1 flex flex-col gap-2 md:gap-4 bg-white p-2 md:p-4 rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+      <div id="printable-dashboard" className="flex-1 flex flex-col gap-2 md:gap-4 bg-white p-2 md:p-4 rounded-lg shadow-sm border border-slate-200 overflow-hidden print:overflow-visible min-h-0">
         <header className="text-center mb-1 md:mb-4 flex-shrink-0">
             <h2 className="text-sm md:text-xl font-semibold text-gray-800 mb-1 md:mb-2 italic print:text-sm">
                <input 
@@ -524,27 +524,31 @@ export function ScheduleManager() {
             </h1>
         </header>
 
-        <ScheduleGrid
-            data={displayData}
-            zones={currentZones} 
-            onCellChange={handleCellChange}
-            onZoneUpdate={handleZoneUpdate}
-            volunteers={allVolunteers} 
-            gyanPracharaks={displayGPs}
-            currentLang={currentLang}
-        />
+        <div className="flex-1 min-h-0 overflow-hidden print:overflow-visible">
+          <ScheduleGrid
+              data={displayData}
+              zones={currentZones} 
+              onCellChange={handleCellChange}
+              onZoneUpdate={handleZoneUpdate}
+              volunteers={allVolunteers} 
+              gyanPracharaks={displayGPs}
+              currentLang={currentLang}
+          />
+        </div>
         
-        <Footer 
-          currentLang={currentLang} 
-          title={footerTitle}
-          reqs={footerReqs}
-          onTitleUpdate={setFooterTitle}
-          onReqUpdate={(idx, val) => {
-             const newReqs = [...footerReqs];
-             newReqs[idx] = val;
-             setFooterReqs(newReqs);
-          }}
-        />
+        <div className="flex-shrink-0">
+          <Footer 
+            currentLang={currentLang} 
+            title={footerTitle}
+            reqs={footerReqs}
+            onTitleUpdate={setFooterTitle}
+            onReqUpdate={(idx, val) => {
+               const newReqs = [...footerReqs];
+               newReqs[idx] = val;
+               setFooterReqs(newReqs);
+            }}
+          />
+        </div>
       </div>
       
       <div className="mt-2 text-[10px] md:text-sm text-gray-500 text-center no-print flex-shrink-0">
