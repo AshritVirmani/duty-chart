@@ -100,12 +100,12 @@ export function ScheduleGrid({
 
       {/* Desktop Table Layout */}
       <div className="hidden md:block flex-1 overflow-auto border border-black rounded-lg shadow-lg bg-white relative print:border-none print:shadow-none print:overflow-visible print:block" id="schedule-grid">
-        <table className="w-full border-collapse table-auto print:min-w-0 print:w-full print:table-fixed print:h-full">
+        <table className="w-full border-collapse min-w-full print:min-w-0 print:w-full print:table-fixed print:h-full" style={{ tableLayout: 'auto' }}>
         <thead className="bg-slate-100 sticky top-0 z-20 shadow-sm print:static print:bg-white print:shadow-none">
           <tr>
             <th
               rowSpan={3}
-              className="border border-black p-2 text-center min-w-[90px] sticky left-0 z-30 bg-slate-100 font-bold text-gray-700 text-base align-middle print:static print:bg-white print:min-w-0 print:w-[8%]"
+              className="border border-black p-2 text-center w-[100px] min-w-[100px] max-w-[120px] sticky left-0 z-30 bg-slate-100 font-bold text-gray-700 text-sm lg:text-base align-middle print:static print:bg-white print:min-w-0 print:w-[8%]"
             >
               <div className="flex flex-col gap-1">
                 <span className="whitespace-pre-line">{t.grid.day_date}</span>
@@ -113,14 +113,14 @@ export function ScheduleGrid({
             </th>
             <th
               rowSpan={3}
-              className="border border-black p-2 text-center min-w-[90px] sticky left-[90px] z-30 bg-slate-100 font-bold text-gray-700 text-lg align-middle print:static print:bg-white print:min-w-0 print:w-[8%]"
+              className="border border-black p-2 text-center w-[100px] min-w-[100px] max-w-[120px] sticky left-[100px] lg:left-[120px] z-30 bg-slate-100 font-bold text-gray-700 text-base lg:text-lg align-middle print:static print:bg-white print:min-w-0 print:w-[8%]"
             >
               {t.grid.service}
             </th>
             {zones.map((zone, index) => (
               <th
                 key={`num-${zone.id}`}
-                className="border border-black p-1 text-center font-bold text-gray-800 text-base print:text-sm"
+                className="border border-black p-1 text-center font-bold text-gray-800 text-sm lg:text-base print:text-sm min-w-[120px] max-w-[180px]"
               >
                 {index + 1}
               </th>
@@ -131,20 +131,20 @@ export function ScheduleGrid({
             {zones.map((zone, index) => (
               <th
                 key={`name-${zone.id}`}
-                className="border border-black p-1.5 text-center font-semibold text-gray-700 align-top group relative print:min-w-0 print:align-middle"
+                className="border border-black p-1.5 text-center font-semibold text-gray-700 align-top group relative min-w-[120px] max-w-[180px] print:min-w-0 print:align-middle"
               >
                 <div className="print:hidden">
                   <input
                     type="text"
                     value={zone.name}
                     onChange={(e) => onZoneUpdate(index, "name", e.target.value)}
-                    className="w-full text-center bg-transparent font-bold text-gray-900 mb-0.5 border-b border-transparent hover:border-gray-400 focus:border-blue-500 focus:outline-none text-base whitespace-normal"
+                    className="w-full text-center bg-transparent font-bold text-gray-900 mb-0.5 border-b border-transparent hover:border-gray-400 focus:border-blue-500 focus:outline-none text-sm lg:text-base whitespace-normal"
                   />
                   <input
                     type="text"
                     value={zone.contact}
                     onChange={(e) => onZoneUpdate(index, "contact", e.target.value)}
-                    className="w-full text-center bg-transparent text-sm text-gray-600 font-normal border-b border-transparent hover:border-gray-400 focus:border-blue-500 focus:outline-none"
+                    className="w-full text-center bg-transparent text-xs lg:text-sm text-gray-600 font-normal border-b border-transparent hover:border-gray-400 focus:border-blue-500 focus:outline-none"
                   />
                 </div>
                 
@@ -160,13 +160,13 @@ export function ScheduleGrid({
             {zones.map((zone, index) => (
               <th
                 key={`time-${zone.id}`}
-                className="border border-black p-1.5 text-center text-sm font-medium text-gray-800 print:text-xs"
+                className="border border-black p-1 lg:p-1.5 text-center text-xs lg:text-sm font-medium text-gray-800 print:text-xs min-w-[120px] max-w-[180px]"
               >
                  <input
                   type="text"
                   value={zone.time}
                   onChange={(e) => onZoneUpdate(index, "time", e.target.value)}
-                  className="w-full text-center bg-transparent font-medium border-b border-transparent hover:border-gray-400 focus:border-blue-500 focus:outline-none print:hidden text-sm"
+                  className="w-full text-center bg-transparent font-medium border-b border-transparent hover:border-gray-400 focus:border-blue-500 focus:outline-none print:hidden text-xs lg:text-sm"
                 />
                 <span className="hidden print:block text-xs font-medium whitespace-nowrap">{zone.time}</span>
               </th>
@@ -187,16 +187,16 @@ export function ScheduleGrid({
                   {serviceIndex === 0 && (
                     <td
                       rowSpan={dayData.services.length}
-                      className="border border-black p-3 font-bold text-gray-700 align-middle sticky left-0 z-10 bg-white text-center print:static print:p-2"
+                      className="border border-black p-2 lg:p-3 font-bold text-gray-700 align-middle sticky left-0 z-10 bg-white text-center w-[100px] min-w-[100px] max-w-[120px] print:static print:p-2"
                     >
                       <div className="flex flex-col gap-1">
-                        <span className="text-base text-gray-900 print:text-base">{dayData.day}</span>
-                        <span className="text-sm text-gray-500 font-medium print:text-sm whitespace-nowrap">{dayData.date}</span>
+                        <span className="text-sm lg:text-base text-gray-900 print:text-base">{dayData.day}</span>
+                        <span className="text-xs lg:text-sm text-gray-500 font-medium print:text-sm whitespace-nowrap">{dayData.date}</span>
                       </div>
                     </td>
                   )}
 
-                  <td className="border border-black p-3 font-semibold text-gray-700 align-middle sticky left-[90px] z-10 bg-inherit text-center text-base print:static print:text-base print:p-2">
+                  <td className="border border-black p-2 lg:p-3 font-semibold text-gray-700 align-middle sticky left-[100px] lg:left-[120px] z-10 bg-inherit text-center text-sm lg:text-base w-[100px] min-w-[100px] max-w-[120px] print:static print:text-base print:p-2">
                     <span className="print:whitespace-normal print:break-words">
                       {service.type === "Stage Seva" || service.type === "स्टेज सेवा" ? t.services.stage_seva : 
                        service.type === "Sanchalan" || service.type === "संचालन" ? t.services.sanchalan : service.type}
@@ -209,12 +209,12 @@ export function ScheduleGrid({
                     return (
                       <td
                         key={zone.id}
-                        className="border border-black p-1 text-center align-middle"
+                        className="border border-black p-1 text-center align-middle min-w-[120px] max-w-[180px]"
                       >
                          <div className="relative w-full h-full flex items-center justify-center">
                            <input
                              list={`volunteers-${dayIndex}-${serviceIndex}-${zone.id}`}
-                             className="w-full h-8 px-2 py-0.5 text-base text-center bg-transparent border-transparent hover:border-slate-300 focus:border-blue-500 focus:outline-none rounded-sm font-medium text-gray-800 print:hidden whitespace-normal overflow-hidden text-ellipsis"
+                             className="w-full h-7 lg:h-8 px-1 lg:px-2 py-0.5 text-xs lg:text-sm xl:text-base text-center bg-transparent border-transparent hover:border-slate-300 focus:border-blue-500 focus:outline-none rounded-sm font-medium text-gray-800 print:hidden whitespace-normal overflow-hidden text-ellipsis"
                              value={currentValue || ""}
                              onChange={(e) => onCellChange(dayIndex, serviceIndex, zone.id, e.target.value)}
                            />
