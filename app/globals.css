@@ -192,17 +192,6 @@
     display: none !important;
   }
 
-  /* Show print-specific spans */
-  .print\\:block,
-  [class*="print:block"] {
-    display: block !important;
-  }
-
-  .print\\:flex,
-  [class*="print:flex"] {
-    display: flex !important;
-  }
-
   /* Typography tweaks for print */
   th, td {
     border: 1px solid black !important;
