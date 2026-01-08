@@ -139,10 +139,11 @@
     overflow: hidden;
   }
 
-  /* Hide UI controls */
+  /* Hide UI controls and mobile layout */
   #control-panel, 
   .no-print,
-  button {
+  button,
+  #schedule-grid-mobile {
     display: none !important;
   }
 
