@@ -647,7 +647,7 @@ export function ScheduleManager() {
   const allVolunteers = [...displayStage, ...displaySanchalan]; 
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 p-2 md:p-4 overflow-hidden">
+    <div className="flex flex-col min-h-screen bg-gray-50 p-2 md:p-4">
       <ControlPanel
         onRandomizeStage={handleRandomizeStage}
         onRandomizeSanchalan={handleRandomizeSanchalan}
@@ -673,7 +673,7 @@ export function ScheduleManager() {
         onLangChange={setCurrentLang}
       />
 
-      <div id="printable-dashboard" className="flex-1 flex flex-col gap-2 md:gap-4 bg-white p-2 md:p-4 rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+      <div id="printable-dashboard" className="flex-1 flex flex-col gap-2 md:gap-4 bg-white p-2 md:p-4 rounded-lg shadow-sm border border-slate-200">
         <header className="text-center mb-1 md:mb-4 flex-shrink-0">
             <h2 className="text-sm md:text-xl font-semibold text-gray-800 mb-1 md:mb-2 italic print:text-sm">
                <input 
